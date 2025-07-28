@@ -1,0 +1,24 @@
+<!-- #include file="includes/config.asp" -->
+<!-- #include file="includes/header.asp" -->
+<h2>Task Details</h2>
+<%
+id = Request.QueryString("id")
+Set conn = GetConnection()
+Set rs = conn.Execute("SELECT * FROM Tasks WHERE TaskID = " & id)
+If Not rs.EOF Then
+%>
+    <p><strong>Title:</strong> <%= rs("Title") %></p>
+    <p><strong>Description:</strong> <%= rs("Description") %></p>
+    <p><strong>Due Date:</strong> <%= rs("DueDate") %></p>
+    <p><strong>Status:</strong> <%= rs("Status") %></p>
+    <p><a href="edit_task.asp?id=<%= rs("TaskID") %>">Edit</a> | 
+       <a href="delete_task.asp?id=<%= rs("TaskID") %>" onclick="return confirm('Are you sure?')">Delete</a> | 
+       <a href="index.asp">Back to List</a></p>
+<%
+Else
+    Response.Write "<p>Task not found.</p>"
+End If
+rs.Close
+conn.Close
+%>
+<!-- #include file="includes/footer.asp" -->
